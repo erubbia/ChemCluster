@@ -1,6 +1,7 @@
 streamlit
-rdkit
-scikit-learn
 pandas
-matplotlib
+numpy
+scikit-learn
+rdkit
 py3Dmol
+plotly
