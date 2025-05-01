@@ -1,3 +1,5 @@
+<img width="830" alt="Logo_MolSearch" src="https://github.com/Romainguich/MolSearch/blob/main/Logo_MolSearch.png">
+
 # copier-liac
 
 [Copier](https://github.com/copier-org/copier) template for pure Python libraries.
