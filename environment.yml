@@ -1,0 +1,13 @@
+name: molsearch-env
+channels:
+  - rdkit
+  - conda-forge
+dependencies:
+  - python=3.10
+  - rdkit
+  - streamlit
+  - pandas
+  - numpy
+  - scikit-learn
+  - plotly
+  - py3dmol

@@ -11,6 +11,9 @@ from sklearn.metrics import silhouette_score
 import numpy as np
 import plotly.express as px
 import py3Dmol
+from rdkit import Chem
+from rdkit.Chem import AllChem, rdMolAlign
+from rdkit.ML.Cluster import Butina
 
 # Aesthetic setup
 st.set_page_config(page_title="MolSearch", layout="wide")
@@ -84,6 +87,9 @@ mode = st.radio("Choose analysis mode:", ["📁 Analyze a dataset", "🔬 Analyz
 
 
 # ========== SINGLE MOLECULE MODE ==========
+# test smiles:
+# O=C([O-])CCn1c(=O)c(=O)[nH]c2cc([N+](=O)[O-])c(-n3ccc(C=NOCc4ccccc4)c3)cc21
+# ========== SINGLE MOLECULE MODE ==========
 if mode == "🔬 Analyze a single molecule":
     input_method = st.radio("Choose input method:", ["SMILES", "Draw Molecule"])
     single_mol = None
@@ -100,72 +106,51 @@ if mode == "🔬 Analyze a single molecule":
     if single_mol:
         st.success("Molecule loaded successfully!")
 
-        mol_withHs = Chem.AddHs(single_mol)
-        AllChem.EmbedMultipleConfs(mol_withHs, numConfs=20, params=AllChem.ETKDG())
+        num_confs = st.slider("Number of conformers to generate:", min_value=5, max_value=300, value=50)
 
-        # Align all conformers
-        AllChem.AlignMolConformers(mol_withHs)
+        mol_H = Chem.AddHs(single_mol)
+        cids = AllChem.EmbedMultipleConfs(mol_H, numConfs=num_confs, randomSeed=42)
+        _ = AllChem.UFFOptimizeMoleculeConfs(mol_H)
 
-        # Compute RMSD matrix (symmetric)
-        n_confs = mol_withHs.GetNumConformers()
-        rmsd_mat = np.zeros((n_confs, n_confs))
-        for i in range(n_confs):
-            for j in range(i + 1, n_confs):
-                rms = AllChem.GetConformerRMS(mol_withHs, i, j, prealigned=True)
-                rmsd_mat[i, j] = rmsd_mat[j, i] = rms
+        # Compute RMSD distance matrix
+        dists = []
+        for i in range(len(cids)):
+            for j in range(i):
+                rms = rdMolAlign.GetBestRMS(mol_H, mol_H, i, j)
+                dists.append(rms)
 
-        # PCA
-        coords = PCA(n_components=2).fit_transform(rmsd_mat)
+        # Perform Butina clustering
+        from rdkit.ML.Cluster import Butina
+        clusters = Butina.ClusterData(dists, len(cids), 1.5, isDistData=True, reordering=True)
 
-        # K-means clustering
-        best_score = -1
-        best_k = 2
-        for k in range(2, min(n_confs, 10)):
-            model = KMeans(n_clusters=k, random_state=0).fit(coords)
-            if len(set(model.labels_)) < 2:
-                continue
-            score = silhouette_score(coords, model.labels_)
-            if score > best_score:
-                best_score = score
-                best_k = k
+        st.success(f"🧬 Found {len(clusters)} clusters of conformers")
 
-        final_model = KMeans(n_clusters=best_k, random_state=0).fit(coords)
-        labels = final_model.labels_
+        st.markdown("### 🧪 Cluster Centroids")
 
-        st.success(f"✅ Found {best_k} clusters of conformers")
+        for i, cluster in enumerate(clusters):
+            st.markdown(f"**Cluster {i+1}**")
 
-        # Show PCA plot
-        pca_df = pd.DataFrame(coords, columns=["PCA1", "PCA2"])
-        pca_df["Cluster"] = labels
-        fig = px.scatter(pca_df, x="PCA1", y="PCA2", color=pca_df["Cluster"].astype(str),
-                         title="Conformer Clusters", color_discrete_sequence=px.colors.qualitative.Set3)
-        fig.update_layout(title={"x": 0.5}, plot_bgcolor="#fff", paper_bgcolor="#fff")
-        st.plotly_chart(fig, use_container_width=True)
+            # Pick centroid: conformer with lowest average RMSD to others
+            best_conf = cluster[0]
+            if len(cluster) > 1:
+                avg_rmsd = []
+                for c1 in cluster:
+                    rmsd_sum = sum(rdMolAlign.GetBestRMS(mol_H, mol_H, c1, c2) for c2 in cluster if c1 != c2)
+                    avg_rmsd.append((c1, rmsd_sum / (len(cluster) - 1)))
+                best_conf = min(avg_rmsd, key=lambda x: x[1])[0]
 
-        # Show all conformers aligned in same viewer
-        st.markdown("### 🧬 Aligned Conformers")
-        mb_all = Chem.MolToMolBlock(mol_withHs, confId=0)
-        viewer = py3Dmol.view(width=400, height=400)
-        for confId in range(mol_withHs.GetNumConformers()):
-            viewer.addModel(Chem.MolToMolBlock(mol_withHs, confId=confId), "mol")
-        viewer.setStyle({"stick": {}})
-        viewer.setBackgroundColor("white")
-        viewer.zoomTo()
-        st.components.v1.html(viewer._make_html(), height=400)
+            # Align all conformers in cluster to centroid
+            for c in cluster:
+                rdMolAlign.AlignMol(mol_H, mol_H, prbCid=c, refCid=best_conf)
 
-        # Show centroid conformer for each cluster
-        st.markdown("### 🧭 Cluster Centroids")
-        for cluster_id in sorted(set(labels)):
-            st.markdown(f"**Cluster {cluster_id + 1}**")
-            indices = np.where(labels == cluster_id)[0]
-            centroid_idx = indices[0]  # For simplicity, just pick first
+            # Visualize centroid conformer
             viewer = py3Dmol.view(width=300, height=300)
-            viewer.addModel(Chem.MolToMolBlock(mol_withHs, confId=centroid_idx), "mol")
-            viewer.setStyle({"stick": {}})
+            mb = Chem.MolToMolBlock(mol_H, confId=best_conf)
+            viewer.addModel(mb, "mol")
+            viewer.setStyle({'stick': {}})
             viewer.setBackgroundColor("white")
             viewer.zoomTo()
             st.components.v1.html(viewer._make_html(), height=300)
-
 
 # ========== DATASET MODE ==================================================================================
 else:
