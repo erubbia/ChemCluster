@@ -5,3 +5,4 @@ scikit-learn
 rdkit
 py3Dmol
 plotly
+rdkit.ML.Cluster
