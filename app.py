@@ -42,6 +42,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+
 def calculate_properties(mol, mol_name="Unknown"):
     return {
         "Molecule": mol_name,
