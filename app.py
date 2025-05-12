@@ -17,15 +17,20 @@ from rdkit.ML.Cluster import Butina
 
 # Aesthetic setup
 st.set_page_config(page_title="MolSearch", layout="wide")
+
 st.markdown("""
     <style>
     html, body, [class*="css"] {
         font-family: 'Nunito', sans-serif;
         font-size: 18px;
-        background-color: #f9f9f9;
+        background-color: #f7f9fb;
     }
-    h1, h2, h3 {
-        color: #1f3b57;
+    h1 {
+        font-size: 36px;
+        color: #1f4e79;
+    }
+    h2, h3 {
+        color: #4a6c8c;
     }
     .stButton > button {
         background-color: #BCD4CC;
@@ -37,7 +42,6 @@ st.markdown("""
     .stButton > button:hover {
         background-color: #E1ADAD;
         color: #1f1f1f;
-        transform: scale(1.05);
     }
     </style>
 """, unsafe_allow_html=True)
@@ -84,25 +88,33 @@ st.markdown("""
 <h1><span style='color:#1f3b57;'>Mol</span><span style='color:#BCD4CC;'>Search</span></h1>
 """, unsafe_allow_html=True)
 
-mode = st.radio("Choose analysis mode:", ["📁 Analyze a dataset", "🔬 Analyze a single molecule"])
-
+mode = st.radio("Choose analysis mode:", ["Analyze a dataset", "Analyze a single molecule"])
 
 # ========== SINGLE MOLECULE MODE ==========
-# test smiles:
-# O=C([O-])CCn1c(=O)c(=O)[nH]c2cc([N+](=O)[O-])c(-n3ccc(C=NOCc4ccccc4)c3)cc21
-# ========== SINGLE MOLECULE MODE ==========
-if mode == "🔬 Analyze a single molecule":
-    input_method = st.radio("Choose input method:", ["SMILES", "Draw Molecule"])
+if mode == "Analyze a single molecule":
+    input_method = st.radio("Choose input method:", ["SMILES", "Draw molecule with bonds (ChemDraw style)"])
     single_mol = None
 
     if input_method == "SMILES":
         smiles = st.text_input("Enter a SMILES string:")
         if smiles:
             single_mol = Chem.MolFromSmiles(smiles)
-    else:
-        mol_block = st.text_area("Paste MOL block of the molecule:")
-        if mol_block:
-            single_mol = Chem.MolFromMolBlock(mol_block)
+            if single_mol is None:
+                st.error("Invalid SMILES")
+
+    elif input_method == "Draw molecule with bonds (ChemDraw style)":
+        st.write("Draw your molecule below:")
+        st.components.v1.html(
+            """
+            <iframe src="https://partridgejiang.github.io/Kekule.js/demos/items/chemEditor/chemEditor.html"
+                    width="900" height="600" style="border:none;"></iframe>
+            """,
+            height=650,
+        )
+        st.info(
+            "⚡ After drawing, click the 'Save/Export' button inside the editor "
+            "to get the SMILES string, then paste it into the 'Input SMILES text' section to visualize it!"
+        )
 
     if single_mol:
         st.success("Molecule loaded successfully!")
@@ -124,13 +136,11 @@ if mode == "🔬 Analyze a single molecule":
         from rdkit.ML.Cluster import Butina
         clusters = Butina.ClusterData(dists, len(cids), 1.5, isDistData=True, reordering=True)
 
-        st.success(f"🧬 Found {len(clusters)} clusters of conformers")
+        st.success(f"✅ Found {len(clusters)} clusters of conformers")
+        st.markdown("### Cluster Centroids")
 
-        st.markdown("### 🧪 Cluster Centroids")
-
+        centroid_ids = []
         for i, cluster in enumerate(clusters):
-            st.markdown(f"**Cluster {i+1}**")
-
             # Pick centroid: conformer with lowest average RMSD to others
             best_conf = cluster[0]
             if len(cluster) > 1:
@@ -139,20 +149,26 @@ if mode == "🔬 Analyze a single molecule":
                     rmsd_sum = sum(rdMolAlign.GetBestRMS(mol_H, mol_H, c1, c2) for c2 in cluster if c1 != c2)
                     avg_rmsd.append((c1, rmsd_sum / (len(cluster) - 1)))
                 best_conf = min(avg_rmsd, key=lambda x: x[1])[0]
+            centroid_ids.append((i + 1, best_conf))
 
-            # Align all conformers in cluster to centroid
-            for c in cluster:
-                rdMolAlign.AlignMol(mol_H, mol_H, prbCid=c, refCid=best_conf)
+        # Multiselect box to pick which centroids to overlay
+        st.markdown("#### 🔍 Compare Centroids")
+        selected = st.multiselect(
+            "Select cluster centroids to overlay in 3D:",
+            [f"Cluster {i}" for i, _ in centroid_ids],
+            default=[f"Cluster {i}" for i, _ in centroid_ids[:1]]
+        )
 
-            # Visualize centroid conformer
-            viewer = py3Dmol.view(width=300, height=300)
-            mb = Chem.MolToMolBlock(mol_H, confId=best_conf)
-            viewer.addModel(mb, "mol")
-            viewer.setStyle({'stick': {}})
-            viewer.setBackgroundColor("white")
-            viewer.zoomTo()
-            st.components.v1.html(viewer._make_html(), height=300)
-
+        viewer = py3Dmol.view(width=400, height=400)
+        for i, conf_id in centroid_ids:
+            if f"Cluster {i}" in selected:
+                mb = Chem.MolToMolBlock(mol_H, confId=conf_id)
+                viewer.addModel(mb, "mol")
+        viewer.setStyle({'stick': {}})
+        viewer.setBackgroundColor("white")
+        viewer.zoomTo()
+        st.components.v1.html(viewer._make_html(), height=400)
+        
 # ========== DATASET MODE ==================================================================================
 else:
     uploaded_file = st.file_uploader("Upload a molecule file (.sdf, .mol, .csv with SMILES)", type=["sdf", "mol", "csv"])
@@ -211,10 +227,21 @@ else:
             pca_df = pd.DataFrame(coords[:, :2], columns=["PCA1", "PCA2"])
             pca_df["Cluster"] = labels
             pca_df["SMILES"] = smiles_list
+            pca_df["Cluster_Label"] = pca_df["Cluster"].astype(str)  # add this
 
-            fig = px.scatter(pca_df, x="PCA1", y="PCA2", color=pca_df["Cluster"].astype(str),
-                             hover_data=["SMILES"], title="Molecule Clusters",
-                             color_discrete_sequence=px.colors.qualitative.Set3)
+            sorted_cluster_labels = sorted(pca_df["Cluster_Label"].unique(), key=lambda x: int(x))
+
+            fig = px.scatter(
+                pca_df,
+                x="PCA1",
+                y="PCA2",
+                color="Cluster_Label",
+                hover_data=["SMILES"],
+                title="Molecule Clusters",
+                color_discrete_sequence=px.colors.qualitative.Pastel,
+                category_orders={"Cluster_Label": sorted_cluster_labels}
+            )
+            fig.update_traces(marker=dict(line=dict(width=1, color="black"), opacity=0.85))
             fig.update_layout(title={"x": 0.5, "font": {"size": 24}}, plot_bgcolor="#ffffff", paper_bgcolor="#ffffff")
             st.plotly_chart(fig, use_container_width=True)
 
