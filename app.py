@@ -24,7 +24,7 @@ from io import BytesIO
 st.markdown(
     """
     <div style="text-align: center; padding-bottom: 10px;">
-        <img src="https://github.com/erubbia/molsearch/raw/main/Logo%20ChemCluster.png" alt="ChemCluster Logo" width="400">
+       <img src="https://raw.githubusercontent.com/Romainguich/ChemCluster/main/assets/Logo%20ChemCluster.png" alt="ChemCluster Logo" width="400">
     </div>
     <div style="text-align: left; padding-left: 0px; padding-bottom: 10px;">
         <span style="font-size: 24px; font-weight: bold; color: #11111;">
