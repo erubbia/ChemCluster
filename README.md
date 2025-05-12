@@ -1,4 +1,4 @@
-<img width="300" alt="MolSearch Logo" src="https://github.com/Romainguich/ChemCluster/blob/main/assets/Logo%20ChemCluster.png>
+<img width="300" alt="Logo MolSearch" src="https://raw.githubusercontent.com/Romainguich/ChemCluster/main/assets/Logo%20ChemCluster.png">
 
 # - ChemCluster -
 

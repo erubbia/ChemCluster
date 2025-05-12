@@ -2,7 +2,6 @@
 # --- MolSearch: Final Split Version (Single vs Dataset Mode) ---
 
 import streamlit as st
-st.set_page_config(page_title="ChemCluster", layout="wide")
 import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import Descriptors, Crippen, Lipinski, rdMolDescriptors, Draw, AllChem, DataStructs, rdDistGeom, rdMolAlign
@@ -17,10 +16,13 @@ from rdkit.Chem import AllChem, rdMolAlign
 from rdkit.ML.Cluster import Butina
 import base64
 from io import BytesIO
+import plotly.graph_objects as go
 
 # Aesthetic setup
 
 # Logo only (no separate text title)
+st.set_page_config(page_title="ChemCluster", layout="wide")
+
 st.markdown(
     """
     <div style="text-align: center; padding-bottom: 10px;">
@@ -266,28 +268,51 @@ else:
             pca_df["SMILES"] = smiles_list
             pca_df["Cluster_Label"] = pca_df["Cluster"].astype(str)
 
-            pca_df["MolImg"] = [mol_to_base64_img(m) for m in mols]
+            # Fonction image mini base64
+            def mol_to_base64_img(mol, size=(100, 100)):
+                img = Draw.MolToImage(mol, size=size)
+                buffer = BytesIO()
+                img.save(buffer, format="PNG")
+                buffer.seek(0)
+                return "data:image/png;base64," + base64.b64encode(buffer.read()).decode()
 
+            pca_df["MolImg"] = [mol_to_base64_img(m) for m in mols]
             sorted_cluster_labels = sorted(pca_df["Cluster_Label"].unique(), key=lambda x: int(x))
+
+            import plotly.express as px
+            from streamlit_plotly_events import plotly_events
 
             fig = px.scatter(
                 pca_df,
                 x="PCA1",
                 y="PCA2",
                 color="Cluster_Label",
-                hover_data={"SMILES": True, "MolImg": True, "PCA1":False, "PCA2": False, "Cluster_Label": False},
-                title="Molecule Clusters",
+                hover_data={"SMILES": True},
+                custom_data=["SMILES"],
+                title="Molecule Clusters (Click to view molecule)",
                 color_discrete_sequence=px.colors.qualitative.Pastel,
                 category_orders={"Cluster_Label": sorted_cluster_labels}
             )
 
-            fig.update_traces(
-            hovertemplate="<b>SMILES:</b> %{customdata[0]}<br><br>" +
-                          "<img src='%{customdata[1]}' width='150' height='150'><extra></extra>"
-            )
-
             fig.update_layout(title={"x": 0.5, "font": {"size": 24}}, plot_bgcolor="#ffffff", paper_bgcolor="#ffffff")
-            st.plotly_chart(fig, use_container_width=True)
+
+            # Interact with the plot
+            selected_points = plotly_events(fig, click_event=True, hover_event=False, override_height=600)
+
+            # Display selected molecule (no second chart)
+            if selected_points:
+                idx = selected_points[0]['pointIndex']
+                mol = mols[idx]
+                smile = smiles_list[idx]
+                st.markdown("### ➡️ Molecule Selected")
+                col1, col2 = st.columns([1, 2])
+                with col1:
+                    st.image(Draw.MolToImage(mol, size=(300, 300)))
+                    viewer = show_3d_molecule(mol)
+                    st.components.v1.html(viewer._make_html(), height=250)
+                with col2:
+                    props = calculate_properties(mol, mol_name=smile)
+                    st.dataframe(pd.DataFrame(props.items(), columns=["Property", "Value"]))
 
             # -------- Property-Based Cluster Search --------
             cluster_props_summary = {}
