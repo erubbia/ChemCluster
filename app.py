@@ -2,6 +2,7 @@
 # --- MolSearch: Final Split Version (Single vs Dataset Mode) ---
 
 import streamlit as st
+st.set_page_config(page_title="ChemCluster", layout="wide")
 import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import Descriptors, Crippen, Lipinski, rdMolDescriptors, Draw, AllChem, DataStructs, rdDistGeom, rdMolAlign
@@ -16,8 +17,18 @@ from rdkit.Chem import AllChem, rdMolAlign
 from rdkit.ML.Cluster import Butina
 
 # Aesthetic setup
-st.set_page_config(page_title="MolSearch", layout="wide")
 
+# Logo only (no separate text title)
+st.markdown(
+    """
+    <div style="text-align: center; padding-bottom: 10px;">
+        <img src="https://github.com/erubbia/molsearch/raw/main/Logo_MolSearch.png" alt="ChemCluster Logo" width="300">
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# Custom styles
 st.markdown("""
     <style>
     html, body, [class*="css"] {
@@ -25,23 +36,38 @@ st.markdown("""
         font-size: 18px;
         background-color: #f7f9fb;
     }
-    h1 {
-        font-size: 36px;
+
+    h1, h2, h3 {
         color: #1f4e79;
     }
-    h2, h3 {
-        color: #4a6c8c;
-    }
+
     .stButton > button {
         background-color: #BCD4CC;
         color: #1f1f1f;
         border-radius: 10px;
         padding: 0.6em 1.2em;
         font-size: 18px;
+        transition: all 0.2s ease-in-out;
+        border: none;
     }
+
     .stButton > button:hover {
-        background-color: #E1ADAD;
-        color: #1f1f1f;
+        background-color: #98c1b6;
+        transform: scale(1.05);
+        color: #000000;
+    }
+
+    /* Radio & checkbox custom color */
+    div[data-baseweb="radio"] > div > label > div:first-child,
+    div[data-baseweb="checkbox"] > div > div {
+        background-color: #BCD4CC;
+        border-color: #BCD4CC;
+    }
+
+    div[data-baseweb="radio"] > div > label > div:first-child:hover,
+    div[data-baseweb="checkbox"] > div > div:hover {
+        background-color: #98c1b6;
+        border-color: #98c1b6;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -83,10 +109,6 @@ def show_3d_molecule(mol, confId=-1):
     viewer.zoomTo()
     return viewer
 
-# Title
-st.markdown("""
-<h1><span style='color:#1f3b57;'>Mol</span><span style='color:#BCD4CC;'>Search</span></h1>
-""", unsafe_allow_html=True)
 
 mode = st.radio("Choose analysis mode:", ["Analyze a dataset", "Analyze a single molecule"])
 
