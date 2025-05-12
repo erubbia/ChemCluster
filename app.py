@@ -15,6 +15,8 @@ import py3Dmol
 from rdkit import Chem
 from rdkit.Chem import AllChem, rdMolAlign
 from rdkit.ML.Cluster import Butina
+import base64
+from io import BytesIO
 
 # Aesthetic setup
 
@@ -22,7 +24,12 @@ from rdkit.ML.Cluster import Butina
 st.markdown(
     """
     <div style="text-align: center; padding-bottom: 10px;">
-        <img src="https://github.com/erubbia/molsearch/raw/main/Logo_MolSearch.png" alt="ChemCluster Logo" width="300">
+        <img src="https://github.com/erubbia/molsearch/raw/main/Logo%20ChemCluster.png" alt="ChemCluster Logo" width="400">
+    </div>
+    <div style="text-align: left; padding-left: 0px; padding-bottom: 10px;">
+        <span style="font-size: 24px; font-weight: bold; color: #11111;">
+            Welcome to <span style="color: #1f3b57;">Chem</span><span style="color: #6ea37f;">Cluster</span> !
+        </span>
     </div>
     """,
     unsafe_allow_html=True
@@ -72,7 +79,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-
 def calculate_properties(mol, mol_name="Unknown"):
     return {
         "Molecule": mol_name,
@@ -108,6 +114,14 @@ def show_3d_molecule(mol, confId=-1):
     viewer.setBackgroundColor('0xffffff')
     viewer.zoomTo()
     return viewer
+
+def mol_to_base64_img(mol):
+    img = Draw.MolToImage(mol, size=(200, 200))
+    buffer = BytesIO()
+    img.save(buffer, format="PNG")
+    buffer.seek(0)
+    return "data:image/png;base64," + base64.b64encode(buffer.read()).decode()
+
 
 
 mode = st.radio("Choose analysis mode:", ["Analyze a dataset", "Analyze a single molecule"])
@@ -246,10 +260,13 @@ else:
             model = KMeans(n_clusters=best_k, random_state=0).fit(coords)
             labels = model.labels_
 
+            # Create PCA dataframe
             pca_df = pd.DataFrame(coords[:, :2], columns=["PCA1", "PCA2"])
             pca_df["Cluster"] = labels
             pca_df["SMILES"] = smiles_list
-            pca_df["Cluster_Label"] = pca_df["Cluster"].astype(str)  # add this
+            pca_df["Cluster_Label"] = pca_df["Cluster"].astype(str)
+
+            pca_df["MolImg"] = [mol_to_base64_img(m) for m in mols]
 
             sorted_cluster_labels = sorted(pca_df["Cluster_Label"].unique(), key=lambda x: int(x))
 
@@ -258,15 +275,21 @@ else:
                 x="PCA1",
                 y="PCA2",
                 color="Cluster_Label",
-                hover_data=["SMILES"],
+                hover_data={"SMILES": True, "MolImg": True, "PCA1":False, "PCA2": False, "Cluster_Label": False},
                 title="Molecule Clusters",
                 color_discrete_sequence=px.colors.qualitative.Pastel,
                 category_orders={"Cluster_Label": sorted_cluster_labels}
             )
-            fig.update_traces(marker=dict(line=dict(width=1, color="black"), opacity=0.85))
+
+            fig.update_traces(
+            hovertemplate="<b>SMILES:</b> %{customdata[0]}<br><br>" +
+                          "<img src='%{customdata[1]}' width='150' height='150'><extra></extra>"
+            )
+
             fig.update_layout(title={"x": 0.5, "font": {"size": 24}}, plot_bgcolor="#ffffff", paper_bgcolor="#ffffff")
             st.plotly_chart(fig, use_container_width=True)
 
+            # -------- Property-Based Cluster Search --------
             cluster_props_summary = {}
             for clust in sorted(set(labels)):
                 indices = [i for i, x in enumerate(labels) if x == clust]
@@ -289,7 +312,6 @@ else:
                     st.warning("No matching cluster found.")
 
             selected_cluster = st.selectbox("Or select a Cluster to Explore:", sorted(pca_df["Cluster"].unique()))
-
             cluster_indices = pca_df[pca_df["Cluster"] == selected_cluster].index.tolist()
             st.success(f"🔍 Found {len(cluster_indices)} molecules in Cluster {selected_cluster}")
 
