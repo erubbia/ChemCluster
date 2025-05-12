@@ -1,14 +1,14 @@
 <img width="300" alt="MolSearch Logo" src="https://github.com/Romaininguich/MolSearch/blob/main/Logo_MolSearch.png>
 
-# - MolSearch -
+# - ChemCluster -
 
-**MolSearch** is an interactive web application for cheminformatics and molecular analysis, built using **Streamlit**, **RDKit**, and **scikit-learn**.
+**ChemCluster** is an interactive web application for cheminformatics and molecular analysis, built using **Streamlit**, **RDKit**, and **scikit-learn**.
 
 Final project for the course **Practical Programming in Chemistry** — EPFL CH-200
 
 ## 📦 Package overview
 
-**MolSearch** is an interactive cheminformatics platform developed at **EPFL** in 2025 as part of the *Practical Programming in Chemistry* course. It is a user-friendly web application designed to explore and analyze chemical structures, either individually or as datasets. 
+**ChemCluster** is an interactive cheminformatics platform developed at **EPFL** in 2025 as part of the *Practical Programming in Chemistry* course. It is a user-friendly web application designed to explore and analyze chemical structures, either individually or as datasets. 
 
 This tool enables users to compute key molecular properties, visualize 2D and 3D structures, and perform clustering based on molecular similarity or conformer geometry. It also offers filtering options to help select clusters matching specific physicochemical criteria.
 
