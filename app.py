@@ -150,8 +150,7 @@ if mode == "Analyze a single molecule":
             height=650,
         )
         st.info(
-            "⚡ After drawing, click the 'Save/Export' button inside the editor "
-            "to get the SMILES string, then paste it into the 'Input SMILES text' section to visualize it!"
+            "⚡ After drawing your molecule, click the 'Save to file' button in the editor and choose the SMILES format to get the corresponding string, then paste it into the 'Choose input method: SMILES' section to visualize it!"
         )
 
     if single_mol:
@@ -207,7 +206,7 @@ if mode == "Analyze a single molecule":
         viewer.zoomTo()
         st.components.v1.html(viewer._make_html(), height=400)
         
-# ========== DATASET MODE ==================================================================================
+# ========== DATASET MODE ==========
 else:
     uploaded_file = st.file_uploader("Upload a molecule file (.sdf, .mol, .csv with SMILES)", type=["sdf", "mol", "csv"])
     mols, smiles_list = [], []
