@@ -1,4 +1,4 @@
-name: molsearch-env
+name: chemcluster-env
 channels:
   - conda-forge
   - https://repo.anaconda.com/pkgs/main
@@ -218,4 +218,4 @@ dependencies:
   - pip:
       - plotly==5.19.0
       - streamlit-plotly-events==0.0.6
-prefix: /opt/anaconda3/envs/molsearch-env
+prefix: /opt/anaconda3/envs/chemcluster-env
