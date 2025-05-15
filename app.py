@@ -1,22 +1,33 @@
 
 # --- MolSearch: Final Split Version (Single vs Dataset Mode) ---
 
+# Streamlit and more
 import streamlit as st
 import pandas as pd
+from io import BytesIO
+import base64
+
+# RDKit tools
 from rdkit import Chem
-from rdkit.Chem import Descriptors, Crippen, Lipinski, rdMolDescriptors, Draw, AllChem, DataStructs, rdDistGeom, rdMolAlign
+from rdkit.Chem import (
+    Descriptors, Crippen, Lipinski, rdMolDescriptors,
+    Draw, AllChem, DataStructs, rdDistGeom, rdMolAlign
+)
+from rdkit.ML.Cluster import Butina
+
+# Analysis
+import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
-import numpy as np
+
+# Visualization
+import matplotlib
+matplotlib.use('MacOSX')  # for local plotting compatibility on macOS
 import plotly.express as px
-import py3Dmol
-from rdkit import Chem
-from rdkit.Chem import AllChem, rdMolAlign
-from rdkit.ML.Cluster import Butina
-import base64
-from io import BytesIO
 import plotly.graph_objects as go
+import py3Dmol
+from streamlit_plotly_events import plotly_events
 
 # Aesthetic setup
 
@@ -279,15 +290,12 @@ else:
             pca_df["MolImg"] = [mol_to_base64_img(m) for m in mols]
             sorted_cluster_labels = sorted(pca_df["Cluster_Label"].unique(), key=lambda x: int(x))
 
-            import plotly.express as px
-            from streamlit_plotly_events import plotly_events
-
             fig = px.scatter(
                 pca_df,
                 x="PCA1",
                 y="PCA2",
                 color="Cluster_Label",
-                hover_data={"SMILES": True},
+                hover_data={"SMILES": True, "PCA1": False, "PCA2": False},
                 custom_data=["SMILES"],
                 title="Molecule Clusters (Click to view molecule)",
                 color_discrete_sequence=px.colors.qualitative.Pastel,
