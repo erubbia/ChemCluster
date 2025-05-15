@@ -2,13 +2,13 @@
 
 # - ChemCluster -
 
-**ChemCluster** is an interactive web application for cheminformatics and molecular analysis, built using **Streamlit**, **RDKit**, and **scikit-learn**.
+**ChemCluster** is an interactive web application for cheminformatics and molecular analysis, focusing on forming and visualizing molecular clusters built using **Streamlit**, **RDKit**, and **scikit-learn**.
 
 Final project for the course **Practical Programming in Chemistry** — EPFL CH-200
 
 ## 📦 Package overview
 
-**ChemCluster** is an interactive cheminformatics platform developed at **EPFL** in 2025 as part of the *Practical Programming in Chemistry* course. It is a user-friendly web application designed to explore and analyze chemical structures, either individually or as datasets. 
+**ChemCluster** is an interactive cheminformatics platform developed at **EPFL** in 2025 as part of the *Practical Programming in Chemistry* course. It is a user-friendly web application designed to explore and analyze chemical structures, either individually via the formation of conformers or as datasets. 
 
 This tool enables users to compute key molecular properties, visualize 2D and 3D structures, and perform clustering based on molecular similarity or conformer geometry. It also offers filtering options to help select clusters matching specific physicochemical criteria.
 
