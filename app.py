@@ -130,7 +130,7 @@ mode = st.radio("Choose analysis mode:", ["Analyze a dataset", "Analyze a single
 
 # ========== SINGLE MOLECULE MODE ==========
 if mode == "Analyze a single molecule":
-    input_method = st.radio("Choose input method:", ["SMILES", "Draw molecule with bonds (ChemDraw style)"])
+    input_method = st.radio("Choose input method:", ["SMILES", "Draw molecule"])
     single_mol = None
 
     if input_method == "SMILES":
@@ -140,8 +140,11 @@ if mode == "Analyze a single molecule":
             if single_mol is None:
                 st.error("Invalid SMILES")
 
-    elif input_method == "Draw molecule with bonds (ChemDraw style)":
+    elif input_method == "Draw molecule":
         st.write("Draw your molecule below:")
+        st.info(
+            "⚡ Click on 'Create new document' in the editor, draw your molecule, click the 'Save to file' button and choose the SMILES format to get the corresponding string, then paste it into the 'Choose input method: SMILES' section to visualize it!"
+        )
         st.components.v1.html(
             """
             <iframe src="https://partridgejiang.github.io/Kekule.js/demos/items/chemEditor/chemEditor.html"
@@ -149,9 +152,7 @@ if mode == "Analyze a single molecule":
             """,
             height=650,
         )
-        st.info(
-            "⚡ After drawing your molecule, click the 'Save to file' button in the editor and choose the SMILES format to get the corresponding string, then paste it into the 'Choose input method: SMILES' section to visualize it!"
-        )
+        
 
     if single_mol:
         st.success("Molecule loaded successfully!")
