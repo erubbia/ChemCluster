@@ -17,6 +17,15 @@ This tool enables users to compute key molecular properties, visualize 2D and 3D
 
 ## 🌟 Features
 
+-  Load molecule files (`.sdf`, `.mol`) or SMILES in `.csv` format
+-  Compute key molecular descriptors (MW, logP, TPSA, H-bond donors/acceptors, etc.)
+-  Visualize 2D molecular structures with RDKit
+-  Generate 3D conformers and visualize them interactively using Py3Dmol
+-  Apply PCA for dimensionality reduction
+-  Cluster molecules using KMeans with automatic silhouette score optimization
+-  Click to view molecular properties directly from PCA plot
+-  Export clusters and molecular data to `.csv`
+
 ## 🛠️ Installation
 
 1. Clone the repository:
@@ -40,6 +49,15 @@ streamlit run app.py
 ```
 
 ## 📖 Usage
+
+After launching the app, access it via Streamlit’s local interface.
+
+You can:
+- Analyze a single molecule by inputting a SMILES string or drawing the structure
+- Upload a dataset of molecules to perform PCA and clustering
+- Click on any point in the scatter plot to view its structure and properties
+- Use filters to identify clusters with desirable properties (e.g., high LogP, low MW)
+- Export selected clusters as CSV files for further analysis
 
 ## 📂 License
 
