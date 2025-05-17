@@ -1,8 +1,8 @@
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-from app import get_fingerprint
+from chemcluster import get_fingerprint
 from rdkit import Chem
 from rdkit.DataStructs import ExplicitBitVect
 

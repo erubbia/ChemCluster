@@ -1,8 +1,8 @@
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-from app import calculate_properties
+from chemcluster import calculate_properties
 from rdkit import Chem
 
 def test_calculate_properties():

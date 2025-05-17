@@ -5,7 +5,7 @@ scikit-learn
 matplotlib
 seaborn
 rdkit
-streamlit
+streamlit==1.45.1
 py3dmol
 pillow
 altair

@@ -1,8 +1,8 @@
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-from app import show_3d_molecule
+from chemcluster import show_3d_molecule
 from rdkit import Chem
 import py3Dmol
 
