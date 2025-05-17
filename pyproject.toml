@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chemcluster"
+version = "0.1.0"
+description = "Streamlit app to explore chemical clustering!"
+authors = [
+  { name = "Elisa Rubbia", email = "elisa.rubbia@epfl.ch" },
+  { name = "Romain Guichonnet", email = "romain.guichonnet@epfl.ch" },
+  { name = "Flavia Zabala Perez", email = "flavia.zabalaperez@epfl.ch" }
+]
+readme = "README.md"
+license = { file = "LICENSE" }
+dependencies = [
+    "rdkit",
+    "streamlit==1.45.1",
+    "py3dmol",
+    "scikit-learn",
+    "plotly==5.19.0",
+    "streamlit-plotly-events==0.0.6"
+]
+requires-python = ">=3.10"
+
+[tool.setuptools]
+packages = ["chemcluster"]
+package-dir = { "" = "src" }

@@ -1,0 +1,113 @@
+Metadata-Version: 2.4
+Name: chemcluster
+Version: 0.1.0
+Summary: Streamlit app to explore chemical clustering!
+Author-email: Elisa Rubbia <elisa.rubbia@epfl.ch>, Romain Guichonnet <romain.guichonnet@epfl.ch>, Flavia Zabala Perez <flavia.zabalaperez@epfl.ch>
+License: MIT License
+        
+        Copyright (c) 2020 Juan Luis Cano Rodríguez
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: rdkit
+Requires-Dist: streamlit==1.45.1
+Requires-Dist: py3dmol
+Requires-Dist: scikit-learn
+Requires-Dist: plotly==5.19.0
+Requires-Dist: streamlit-plotly-events==0.0.6
+Dynamic: license-file
+
+<p align="center">
+  <img width="450" alt="Logo ChemCluster" src="https://raw.githubusercontent.com/Romainguich/ChemCluster/main/assets/Logo%20ChemCluster.png">
+</p>
+
+# - ChemCluster -
+
+**ChemCluster** is an interactive web application for cheminformatics and molecular analysis, focusing on forming and visualizing molecular clusters built using **Streamlit**, **RDKit**, and **scikit-learn**.
+
+Final project for the course **Practical Programming in Chemistry** — EPFL CH-200
+
+## 📦 Package overview
+
+**ChemCluster** is an interactive cheminformatics platform developed at **EPFL** in 2025 as part of the *Practical Programming in Chemistry* course. It is a user-friendly web application designed to explore and analyze chemical structures, either individually via the formation of conformers or as datasets. 
+
+This tool enables users to compute key molecular properties, visualize 2D and 3D structures, and perform clustering based on molecular similarity or conformer geometry. It also offers filtering options to help select clusters matching specific physicochemical criteria.
+
+
+## 🌟 Features
+
+-  Load molecule files (`.sdf`, `.mol`) or SMILES in `.csv` format
+-  Compute key molecular descriptors (MW, logP, TPSA, H-bond donors/acceptors, etc.)
+-  Visualize 2D molecular structures with RDKit
+-  Generate 3D conformers and visualize them interactively using Py3Dmol
+-  Apply PCA for dimensionality reduction
+-  Cluster molecules using KMeans with automatic silhouette score optimization
+-  Click to view molecular properties directly from PCA plot
+-  Export clusters and molecular data to `.csv`
+
+## 🛠️ Installation
+
+1. Clone the repository:
+
+```
+git clone https://github.com/erubbia/ChemCluster.git
+cd ChemCluster
+```
+
+2. Create and activate the conda environment:
+
+```
+conda env create -f environment.yml
+conda activate chemcluster-env
+```
+
+3. Run the Streamlit application:
+
+```
+streamlit run app.py
+```
+
+## 📖 Usage
+
+After launching the app, access it via Streamlit’s local interface.
+
+You can:
+- Analyze a single molecule by inputting a SMILES string or drawing the structure
+- Upload a dataset of molecules to perform PCA and clustering
+- Click on any point in the scatter plot to view its structure and properties
+- Use filters to identify clusters with desirable properties (e.g., high LogP, low MW)
+- Export selected clusters as CSV files for further analysis
+
+## 📂 License
+
+[MIT License](LICENSE)
+
+
+---
+
+### 👨‍🔬 Developers
+
+- Elisa Rubbia, Master's student in Molecular and Biological Chemistry at EPFL [![GitHub - erubbia](https://img.shields.io/badge/GitHub-erubbia-181717.svg?style=flat&logo=github)](https://github.com/erubbia)
+
+- Romain Guichonnet, Master's student in Molecular and Biological Chemistry at EPFL [![GitHub - Romainguich](https://img.shields.io/badge/GitHub-Romainguich-181717.svg?style=flat&logo=github)](https://github.com/Romainguich)
+
+- Flavia Zabala Perez, Master's student in Molecular and Biological Chemistry at EPFL [![GitHub - Flaviazab](https://img.shields.io/badge/GitHub-Flaviazab-181717.svg?style=flat&logo=github)](https://github.com/Flaviazab)
