@@ -7,8 +7,6 @@ import py3Dmol
 from io import BytesIO
 import base64
 
-
-
 def calculate_properties(mol, mol_name="Unknown"):
     return {
         "Molecule": mol_name,

@@ -34,6 +34,9 @@ Requires-Dist: py3dmol
 Requires-Dist: scikit-learn
 Requires-Dist: plotly==5.19.0
 Requires-Dist: streamlit-plotly-events==0.0.6
+Provides-Extra: test
+Requires-Dist: pytest; extra == "test"
+Requires-Dist: tox; extra == "test"
 Dynamic: license-file
 
 <p align="center">
