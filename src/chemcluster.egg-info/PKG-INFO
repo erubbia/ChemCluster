@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: chemcluster
-Version: 0.1.0
+Version: 0.1.1
 Summary: Streamlit app to explore chemical clustering!
 Author-email: Elisa Rubbia <elisa.rubbia@epfl.ch>, Romain Guichonnet <romain.guichonnet@epfl.ch>, Flavia Zabala Perez <flavia.zabalaperez@epfl.ch>
 License: MIT License
