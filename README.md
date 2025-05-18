@@ -19,7 +19,7 @@ This tool enables users to compute key molecular properties, visualize 2D and 3D
 
 - Upload .sdf, .mol, or .csv files with SMILES
 - Compute key molecular properties (MW, logP, TPSA, etc.)
--Visualize molecules in 2D (RDKit) and interactive 3D (Py3Dmol)
+- Visualize molecules in 2D (RDKit) and interactive 3D (Py3Dmol)
 - Reduce dimensionality with PCA and auto-optimize KMeans clustering
 - Click points on the PCA plot to inspect molecules and properties
 - Export cluster data to .csv
@@ -32,8 +32,7 @@ This tool enables users to compute key molecular properties, visualize 2D and 3D
 pip install chemcluster
 ```
 
-2. Run the app
-After installation, run the app with:
+2. Run the app:
 
 ```bash
 chemcluster
@@ -41,7 +40,7 @@ chemcluster
 
 This will open the ChemCluster interface in your browser.
 
-To contribute or run locally from source:
+### To contribute or run locally from source:
 
 ```bash
 git clone https://github.com/erubbia/ChemCluster.git
