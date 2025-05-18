@@ -17,41 +17,55 @@ This tool enables users to compute key molecular properties, visualize 2D and 3D
 
 ## 🌟 Features
 
--  Load molecule files (`.sdf`, `.mol`) or SMILES in `.csv` format
--  Compute key molecular descriptors (MW, logP, TPSA, H-bond donors/acceptors, etc.)
--  Visualize 2D molecular structures with RDKit
--  Generate 3D conformers and visualize them interactively using Py3Dmol
--  Apply PCA for dimensionality reduction
--  Cluster molecules using KMeans with automatic silhouette score optimization
--  Click to view molecular properties directly from PCA plot
--  Export clusters and molecular data to `.csv`
+📁 Upload .sdf, .mol, or .csv files with SMILES
+🧪 Compute key molecular properties (MW, logP, TPSA, etc.)
+🔍 Visualize molecules in 2D (RDKit) and interactive 3D (Py3Dmol)
+📊 Reduce dimensionality with PCA and auto-optimize KMeans clustering
+🖱️ Click points on the PCA plot to inspect molecules and properties
+📤 Export cluster data to .csv
 
 ## 🛠️ Installation
 
-1. Clone the repository:
+1. Install from [PyPI](https://pypi.org/project/chemcluster/)
 
+```bash
+pip install chemcluster
 ```
+
+2. Run the app
+After installation, run the app with:
+
+```bash
+chemcluster
+```
+
+This will open the ChemCluster interface in your browser.
+
+To contribute or run locally from source:
+
+```bash
 git clone https://github.com/erubbia/ChemCluster.git
 cd ChemCluster
-```
-
-2. Create and activate the conda environment:
-
-```
 conda env create -f environment.yml
 conda activate chemcluster-env
+pip install -e .
 ```
 
-3. Run the Streamlit application:
-
-```
-streamlit run app.py
+## ▶️ Testing
+Testing can be done with 'pytest' or 'tox':
+```bash
+pytest
+# or with tox
+tox
 ```
 
 ## 📖 Usage
 
+<<<<<<< HEAD
 After launching the app, access it via Streamlit’s local interface.
 
+=======
+>>>>>>> e7803515 (read me)
 You can:
 - Analyze a single molecule by inputting a SMILES string or drawing the structure
 - Upload a dataset of molecules to perform PCA and clustering
