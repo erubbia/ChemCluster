@@ -17,16 +17,16 @@ This tool enables users to compute key molecular properties, visualize 2D and 3D
 
 ## 🌟 Features
 
-📁 Upload .sdf, .mol, or .csv files with SMILES
-🧪 Compute key molecular properties (MW, logP, TPSA, etc.)
-🔍 Visualize molecules in 2D (RDKit) and interactive 3D (Py3Dmol)
-📊 Reduce dimensionality with PCA and auto-optimize KMeans clustering
-🖱️ Click points on the PCA plot to inspect molecules and properties
-📤 Export cluster data to .csv
+- Upload .sdf, .mol, or .csv files with SMILES
+- Compute key molecular properties (MW, logP, TPSA, etc.)
+-Visualize molecules in 2D (RDKit) and interactive 3D (Py3Dmol)
+- Reduce dimensionality with PCA and auto-optimize KMeans clustering
+- Click points on the PCA plot to inspect molecules and properties
+- Export cluster data to .csv
 
 ## 🛠️ Installation
 
-1. Install from [PyPI](https://pypi.org/project/chemcluster/)
+1. Install from [PyPI](https://pypi.org/project/chemcluster/):
 
 ```bash
 pip install chemcluster
@@ -60,13 +60,6 @@ tox
 ```
 
 ## 📖 Usage
-
-<<<<<<< HEAD
-After launching the app, access it via Streamlit’s local interface.
-
-=======
->>>>>>> e7803515 (read me)
-You can:
 - Analyze a single molecule by inputting a SMILES string or drawing the structure
 - Upload a dataset of molecules to perform PCA and clustering
 - Click on any point in the scatter plot to view its structure and properties
