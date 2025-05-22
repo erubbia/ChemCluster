@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "chemcluster"
-version = "0.1.2"
+version = "0.1.3"
 description = "Streamlit app to explore chemical clustering!"
 authors = [
   { name = "Elisa Rubbia", email = "elisa.rubbia@epfl.ch" },
