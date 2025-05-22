@@ -19,7 +19,8 @@ dependencies = [
   "py3dmol",
   "scikit-learn",
   "plotly==5.19.0",
-  "streamlit-plotly-events==0.0.6"
+  "streamlit-plotly-events==0.0.6",
+  "matplotlib",
 ]
 requires-python = ">=3.10"
 
