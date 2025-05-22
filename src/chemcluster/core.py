@@ -9,7 +9,7 @@ import base64
 
 
 def calculate_properties(mol, mol_name="Unknown"):
-""" Calculates several molecular properties from an RDKit Mol object """
+    """ Calculates several molecular properties from an RDKit Mol object """
     return {
         "Molecule": mol_name,
         "Molecular Weight": round(Descriptors.MolWt(mol), 2),
@@ -23,11 +23,11 @@ def calculate_properties(mol, mol_name="Unknown"):
     }
 
 def get_fingerprint(mol):
-""" Generates a Morgan (circular) fingerprint bit vector for a given molecule """
+    """ Generates a Morgan (circular) fingerprint bit vector for a given molecule """
     return AllChem.GetMorganFingerprintAsBitVect(mol, 2, nBits=2048)
 
 def clean_smiles_list(smiles_list):
-""" Filters and converts a list of SMILES strings into RDKit Mol objects """
+    """ Filters and converts a list of SMILES strings into RDKit Mol objects """
     mols, valid_smiles = [], []
     for smi in smiles_list:
         mol = Chem.MolFromSmiles(smi)
@@ -37,7 +37,7 @@ def clean_smiles_list(smiles_list):
     return mols, valid_smiles
 
 def show_3d_molecule(mol, confId=-1):
-"""  Displays an interactive 3D view of an RDKit molecule using py3Dmol """
+    """  Displays an interactive 3D view of an RDKit molecule using py3Dmol """
     if not mol.GetNumConformers():
         AllChem.EmbedMolecule(mol, AllChem.ETKDG())
     mb = Chem.MolToMolBlock(mol, confId=confId)
@@ -49,7 +49,7 @@ def show_3d_molecule(mol, confId=-1):
     return viewer
 
 def mol_to_base64_img(mol):
-""" Converts an RDKit molecule to a base64-encoded PNG image """
+    """ Converts an RDKit molecule to a base64-encoded PNG image """
     img = Draw.MolToImage(mol, size=(200, 200))
     buffer = BytesIO()
     img.save(buffer, format="PNG")
