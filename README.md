@@ -65,11 +65,15 @@ conda activate chemcluster-env
 - Draw and paste SMILES to visualize and cluster conformers
 - View and overlay optimized 3D centroid structures
 
+<img width="600" alt="centroid superposition" src="https://github.com/erubbia/ChemCluster/blob/main/assets/centroid_superposition.png?raw=true">
+
 **Data set mode:**
 - Upload a SMILES data set to analyze chemical space
 - Perform PCA + KMeans clustering with property-based filters
 - Click to view molecules and export clusters
-  
+
+<img width="600" alt="pca plot" src="https://github.com/erubbia/ChemCluster/blob/main/assets/pca_plot.png?raw=true">
+
 
 ## 📂 License
 
