@@ -74,6 +74,7 @@ conda activate chemcluster-env
 
 <img width="600" alt="pca plot" src="https://github.com/erubbia/ChemCluster/blob/main/assets/pca_plot.png?raw=true">
 
+<img width="650" alt="pca plot 2" src="https://github.com/erubbia/ChemCluster/blob/main/assets/pca_plot2.png?raw=true">
 
 ## 📂 License
 
