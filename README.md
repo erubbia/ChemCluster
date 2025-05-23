@@ -60,6 +60,9 @@ conda activate chemcluster-env
 ```
 
 ## 📖 Usage
+Launching the app brings you to the **main page**, where you can select one of two modes:
+
+<img width="600" alt="centroid superposition" src="https://github.com/erubbia/ChemCluster/blob/main/assets/main_page.png?raw=true">
 
 **Single molecule mode:**
 - Draw and paste SMILES to visualize and cluster conformers
@@ -75,6 +78,8 @@ conda activate chemcluster-env
 <img width="600" alt="pca plot" src="https://github.com/erubbia/ChemCluster/blob/main/assets/pca_plot.png?raw=true">
 
 <img width="650" alt="pca plot 2" src="https://github.com/erubbia/ChemCluster/blob/main/assets/pca_plot2.png?raw=true">
+
+Then, you can **select the cluster(s)** that you want to export as a .csv file by scrolling to the bottom then clicking **"Download Cluster Molecules"**.
 
 ## 📂 License
 
