@@ -50,13 +50,13 @@ git clone https://github.com/erubbia/ChemCluster.git
 cd ChemCluster
 conda env create -f environment.yml
 conda activate chemcluster-env
-pip install -e .
+(chemcluster-env) $ pip install -e .
 ```
 **Testing** can be done with 'pytest' or 'tox':
 ```bash
-pytest
+(chemcluster-env) $ pytest
 # or 
-tox
+(chemcluster-env) $ tox
 ```
 
 ## 📖 Usage
