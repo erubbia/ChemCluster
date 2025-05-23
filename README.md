@@ -17,12 +17,15 @@ This tool enables users to compute key molecular properties, visualize 2D and 3D
 
 ## 🌟 Features
 
-- Upload .sdf, .mol, or .csv files with SMILES
-- Compute key molecular properties (MW, logP, TPSA, etc.)
-- Visualize molecules in 2D (RDKit) and interactive 3D (Py3Dmol)
-- Reduce dimensionality with PCA and auto-optimize KMeans clustering
+- Upload .sdf, .mol, or .csv files containing SMILES
+- Input or draw a single molecule and generate 3D conformers
+- Compute key molecular properties (MW, logP, H-bonding, etc.)
+- Visualize molecules in 2D (RDKit) and interactively in 3D (Py3Dmol)
+- Cluster molecules using PCA + KMeans with silhouette score optimization
 - Click points on the PCA plot to inspect molecules and properties
-- Export cluster data to .csv
+- Overlay and compare 3D cluster centroids for conformers
+- Filter clusters based on desired property profiles
+- Export results and clusters as .csv files
 
 ## 🛠️ Installation
 
@@ -40,7 +43,7 @@ chemcluster
 
 This will open the ChemCluster interface in your browser.
 
-### To contribute or run locally from source:
+### To run locally from source:
 
 ```bash
 git clone https://github.com/erubbia/ChemCluster.git
@@ -49,21 +52,24 @@ conda env create -f environment.yml
 conda activate chemcluster-env
 pip install -e .
 ```
-
-## ▶️ Testing
-Testing can be done with 'pytest' or 'tox':
+**Testing** can be done with 'pytest' or 'tox':
 ```bash
 pytest
-# or with tox
+# or 
 tox
 ```
 
 ## 📖 Usage
-- Analyze a single molecule by inputting a SMILES string or drawing the structure
-- Upload a dataset of molecules to perform PCA and clustering
-- Click on any point in the scatter plot to view its structure and properties
-- Use filters to identify clusters with desirable properties (e.g., high LogP, low MW)
-- Export selected clusters as CSV files for further analysis
+
+**Single molecule mode:**
+- Draw and paste SMILES to visualize and cluster conformers
+- View and overlay optimized 3D centroid structures
+
+**Data set mode:**
+- Upload a SMILES data set to analyze chemical space
+- Perform PCA + KMeans clustering with property-based filters
+- Click to view molecules and export clusters
+  
 
 ## 📂 License
 
