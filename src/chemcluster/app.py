@@ -198,7 +198,7 @@ def main():
 
         if mols:
             with st.spinner("🔄 Analyzing molecules..."):
-                if st.toggle("🔹 Use only 1000 molecules (for speed)"):
+                if st.toggle("Use only 1000 molecules"):
                     mols = mols[:1000]
                     smiles_list = smiles_list[:1000]
 
